@@ -1,0 +1,2409 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "ws-serverless-patterns": {
+        "id": "ws-serverless-patterns",
+        "path": "ws-serverless-patterns",
+        "children": {
+          "users-table": {
+            "id": "users-table",
+            "path": "ws-serverless-patterns/users-table",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "ws-serverless-patterns/users-table/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
+                  "aws:cdk:cloudformation:props": {
+                    "keySchema": [
+                      {
+                        "attributeName": "userid",
+                        "keyType": "HASH"
+                      }
+                    ],
+                    "attributeDefinitions": [
+                      {
+                        "attributeName": "userid",
+                        "attributeType": "S"
+                      }
+                    ],
+                    "billingMode": "PAY_PER_REQUEST",
+                    "tableName": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          {
+                            "Ref": "AWS::StackName"
+                          },
+                          "-users"
+                        ]
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_dynamodb.CfnTable",
+                  "version": "2.86.0"
+                }
+              },
+              "ScalingRole": {
+                "id": "ScalingRole",
+                "path": "ws-serverless-patterns/users-table/ScalingRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.86.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_dynamodb.Table",
+              "version": "2.86.0"
+            }
+          },
+          "UsersTable": {
+            "id": "UsersTable",
+            "path": "ws-serverless-patterns/UsersTable",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.86.0"
+            }
+          },
+          "users-function": {
+            "id": "users-function",
+            "path": "ws-serverless-patterns/users-function",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "ws-serverless-patterns/users-function/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "ws-serverless-patterns/users-function/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.86.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "ws-serverless-patterns/users-function/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ],
+                        "tags": [
+                          {
+                            "key": "Stack",
+                            "value": {
+                              "Ref": "AWS::StackName"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.86.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "ws-serverless-patterns/users-function/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "ws-serverless-patterns/users-function/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "xray:PutTelemetryRecords",
+                                    "xray:PutTraceSegments"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                },
+                                {
+                                  "Action": [
+                                    "dynamodb:BatchGetItem",
+                                    "dynamodb:BatchWriteItem",
+                                    "dynamodb:ConditionCheckItem",
+                                    "dynamodb:DeleteItem",
+                                    "dynamodb:DescribeTable",
+                                    "dynamodb:GetItem",
+                                    "dynamodb:GetRecords",
+                                    "dynamodb:GetShardIterator",
+                                    "dynamodb:PutItem",
+                                    "dynamodb:Query",
+                                    "dynamodb:Scan",
+                                    "dynamodb:UpdateItem"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "userstable4FB8B1A2",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Ref": "AWS::NoValue"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "usersfunctionServiceRoleDefaultPolicyE42C200E",
+                            "roles": [
+                              {
+                                "Ref": "usersfunctionServiceRoleE33870F7"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.86.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.86.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.86.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "ws-serverless-patterns/users-function/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "ws-serverless-patterns/users-function/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.86.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "ws-serverless-patterns/users-function/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.86.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.86.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "ws-serverless-patterns/users-function/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "210f355d37e2fc867b8ca2e9a714acd7e532c47fe27a8629a9b7cc7fb2d6f94c.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "usersfunctionServiceRoleE33870F7",
+                        "Arn"
+                      ]
+                    },
+                    "environment": {
+                      "variables": {
+                        "USERS_TABLE": {
+                          "Ref": "userstable4FB8B1A2"
+                        },
+                        "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+                      }
+                    },
+                    "handler": "index.handler",
+                    "memorySize": 128,
+                    "runtime": "nodejs18.x",
+                    "tags": [
+                      {
+                        "key": "Stack",
+                        "value": {
+                          "Ref": "AWS::StackName"
+                        }
+                      }
+                    ],
+                    "timeout": 100,
+                    "tracingConfig": {
+                      "mode": "Active"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.86.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda_nodejs.NodejsFunction",
+              "version": "2.86.0"
+            }
+          },
+          "UsersFunction": {
+            "id": "UsersFunction",
+            "path": "ws-serverless-patterns/UsersFunction",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.86.0"
+            }
+          },
+          "authorizer-function": {
+            "id": "authorizer-function",
+            "path": "ws-serverless-patterns/authorizer-function",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "ws-serverless-patterns/authorizer-function/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "ws-serverless-patterns/authorizer-function/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.86.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "ws-serverless-patterns/authorizer-function/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ],
+                        "tags": [
+                          {
+                            "key": "Stack",
+                            "value": {
+                              "Ref": "AWS::StackName"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.86.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "ws-serverless-patterns/authorizer-function/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "ws-serverless-patterns/authorizer-function/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "xray:PutTelemetryRecords",
+                                    "xray:PutTraceSegments"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "authorizerfunctionServiceRoleDefaultPolicyC521EA16",
+                            "roles": [
+                              {
+                                "Ref": "authorizerfunctionServiceRoleB2BE3D06"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.86.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.86.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.86.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "ws-serverless-patterns/authorizer-function/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "ws-serverless-patterns/authorizer-function/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.86.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "ws-serverless-patterns/authorizer-function/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.86.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.86.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "ws-serverless-patterns/authorizer-function/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "0766f352b731b4e5084257cf4a193409c85747ce36b174c94e5a523dce588257.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "authorizerfunctionServiceRoleB2BE3D06",
+                        "Arn"
+                      ]
+                    },
+                    "environment": {
+                      "variables": {
+                        "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+                        "USER_POOL_ID": {
+                          "Ref": "userpool38E431F2"
+                        },
+                        "APPLICATION_CLIENT_ID": {
+                          "Ref": "userpooluserpoolclientCA1171AF"
+                        },
+                        "ADMIN_GROUP_NAME": {
+                          "Ref": "apiadmingroupname"
+                        }
+                      }
+                    },
+                    "handler": "index.handler",
+                    "memorySize": 128,
+                    "runtime": "nodejs18.x",
+                    "tags": [
+                      {
+                        "key": "Stack",
+                        "value": {
+                          "Ref": "AWS::StackName"
+                        }
+                      }
+                    ],
+                    "timeout": 100,
+                    "tracingConfig": {
+                      "mode": "Active"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.86.0"
+                }
+              },
+              "wsserverlesspatternsapiauthorizer17FA84C1:Permissions": {
+                "id": "wsserverlesspatternsapiauthorizer17FA84C1:Permissions",
+                "path": "ws-serverless-patterns/authorizer-function/wsserverlesspatternsapiauthorizer17FA84C1:Permissions",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunction",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "authorizerfunctionE8DF8ABA",
+                        "Arn"
+                      ]
+                    },
+                    "principal": "apigateway.amazonaws.com",
+                    "sourceArn": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":execute-api:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":",
+                          {
+                            "Ref": "usersapi3F703257"
+                          },
+                          "/authorizers/",
+                          {
+                            "Ref": "apiauthorizerC9359042"
+                          }
+                        ]
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.86.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda_nodejs.NodejsFunction",
+              "version": "2.86.0"
+            }
+          },
+          "api-authorizer": {
+            "id": "api-authorizer",
+            "path": "ws-serverless-patterns/api-authorizer",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "ws-serverless-patterns/api-authorizer/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::Authorizer",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "wsserverlesspatternsapiauthorizer17FA84C1",
+                    "restApiId": {
+                      "Ref": "usersapi3F703257"
+                    },
+                    "type": "TOKEN",
+                    "authorizerUri": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Fn::Select": [
+                              1,
+                              {
+                                "Fn::Split": [
+                                  ":",
+                                  {
+                                    "Fn::GetAtt": [
+                                      "authorizerfunctionE8DF8ABA",
+                                      "Arn"
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          ":apigateway:",
+                          {
+                            "Fn::Select": [
+                              3,
+                              {
+                                "Fn::Split": [
+                                  ":",
+                                  {
+                                    "Fn::GetAtt": [
+                                      "authorizerfunctionE8DF8ABA",
+                                      "Arn"
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          ":lambda:path/2015-03-31/functions/",
+                          {
+                            "Fn::GetAtt": [
+                              "authorizerfunctionE8DF8ABA",
+                              "Arn"
+                            ]
+                          },
+                          "/invocations"
+                        ]
+                      ]
+                    },
+                    "identitySource": "method.request.header.Authorization"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.CfnAuthorizer",
+                  "version": "2.86.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_apigateway.TokenAuthorizer",
+              "version": "2.86.0"
+            }
+          },
+          "api-access-logs": {
+            "id": "api-access-logs",
+            "path": "ws-serverless-patterns/api-access-logs",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "ws-serverless-patterns/api-access-logs/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Logs::LogGroup",
+                  "aws:cdk:cloudformation:props": {
+                    "logGroupName": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "/",
+                          {
+                            "Ref": "AWS::StackName"
+                          },
+                          "/ApiAccessLogs"
+                        ]
+                      ]
+                    },
+                    "retentionInDays": 30
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.CfnLogGroup",
+                  "version": "2.86.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_logs.LogGroup",
+              "version": "2.86.0"
+            }
+          },
+          "users-api": {
+            "id": "users-api",
+            "path": "ws-serverless-patterns/users-api",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "ws-serverless-patterns/users-api/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "users-api",
+                    "tags": [
+                      {
+                        "key": "Name",
+                        "value": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              {
+                                "Ref": "AWS::StackName"
+                              },
+                              "-api"
+                            ]
+                          ]
+                        }
+                      },
+                      {
+                        "key": "Stack",
+                        "value": {
+                          "Ref": "AWS::StackName"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.CfnRestApi",
+                  "version": "2.86.0"
+                }
+              },
+              "Deployment": {
+                "id": "Deployment",
+                "path": "ws-serverless-patterns/users-api/Deployment",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "ws-serverless-patterns/users-api/Deployment/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
+                      "aws:cdk:cloudformation:props": {
+                        "restApiId": {
+                          "Ref": "usersapi3F703257"
+                        },
+                        "description": "Automatically created by the RestApi construct"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.CfnDeployment",
+                      "version": "2.86.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.Deployment",
+                  "version": "2.86.0"
+                }
+              },
+              "DeploymentStage.prod": {
+                "id": "DeploymentStage.prod",
+                "path": "ws-serverless-patterns/users-api/DeploymentStage.prod",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "ws-serverless-patterns/users-api/DeploymentStage.prod/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
+                      "aws:cdk:cloudformation:props": {
+                        "restApiId": {
+                          "Ref": "usersapi3F703257"
+                        },
+                        "accessLogSetting": {
+                          "destinationArn": {
+                            "Fn::GetAtt": [
+                              "apiaccesslogs454B57D2",
+                              "Arn"
+                            ]
+                          },
+                          "format": "{\"requestId\":\"$context.requestId\",\"ip\":\"$context.identity.sourceIp\",\"user\":\"$context.identity.user\",\"caller\":\"$context.identity.caller\",\"requestTime\":\"$context.requestTime\",\"httpMethod\":\"$context.httpMethod\",\"resourcePath\":\"$context.resourcePath\",\"status\":\"$context.status\",\"protocol\":\"$context.protocol\",\"responseLength\":\"$context.responseLength\"}"
+                        },
+                        "deploymentId": {
+                          "Ref": "usersapiDeploymentD9BFB59Db85cb9c689115b4fca64a73423c0d9b5"
+                        },
+                        "methodSettings": [
+                          {
+                            "httpMethod": "*",
+                            "resourcePath": "/*",
+                            "dataTraceEnabled": true,
+                            "loggingLevel": "INFO"
+                          }
+                        ],
+                        "stageName": "prod",
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": {
+                              "Fn::Join": [
+                                "",
+                                [
+                                  {
+                                    "Ref": "AWS::StackName"
+                                  },
+                                  "-api"
+                                ]
+                              ]
+                            }
+                          },
+                          {
+                            "key": "Stack",
+                            "value": {
+                              "Ref": "AWS::StackName"
+                            }
+                          }
+                        ],
+                        "tracingEnabled": true
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.CfnStage",
+                      "version": "2.86.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.Stage",
+                  "version": "2.86.0"
+                }
+              },
+              "Endpoint": {
+                "id": "Endpoint",
+                "path": "ws-serverless-patterns/users-api/Endpoint",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.86.0"
+                }
+              },
+              "Default": {
+                "id": "Default",
+                "path": "ws-serverless-patterns/users-api/Default",
+                "children": {
+                  "users": {
+                    "id": "users",
+                    "path": "ws-serverless-patterns/users-api/Default/users",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "ws-serverless-patterns/users-api/Default/users/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "usersapi3F703257",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "users",
+                            "restApiId": {
+                              "Ref": "usersapi3F703257"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.CfnResource",
+                          "version": "2.86.0"
+                        }
+                      },
+                      "GET": {
+                        "id": "GET",
+                        "path": "ws-serverless-patterns/users-api/Default/users/GET",
+                        "children": {
+                          "ApiPermission.wsserverlesspatternsusersapiE5D489B3.GET..users": {
+                            "id": "ApiPermission.wsserverlesspatternsusersapiE5D489B3.GET..users",
+                            "path": "ws-serverless-patterns/users-api/Default/users/GET/ApiPermission.wsserverlesspatternsusersapiE5D489B3.GET..users",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "usersfunctionE009B461",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "usersapi3F703257"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "usersapiDeploymentStageprod3AFD506F"
+                                      },
+                                      "/GET/users"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.86.0"
+                            }
+                          },
+                          "ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.GET..users": {
+                            "id": "ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.GET..users",
+                            "path": "ws-serverless-patterns/users-api/Default/users/GET/ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.GET..users",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "usersfunctionE009B461",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "usersapi3F703257"
+                                      },
+                                      "/test-invoke-stage/GET/users"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.86.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "ws-serverless-patterns/users-api/Default/users/GET/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "GET",
+                                "resourceId": {
+                                  "Ref": "usersapiusersFFFF605A"
+                                },
+                                "restApiId": {
+                                  "Ref": "usersapi3F703257"
+                                },
+                                "authorizationType": "CUSTOM",
+                                "authorizerId": {
+                                  "Ref": "apiauthorizerC9359042"
+                                },
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "usersfunctionE009B461",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.86.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.86.0"
+                        }
+                      },
+                      "POST": {
+                        "id": "POST",
+                        "path": "ws-serverless-patterns/users-api/Default/users/POST",
+                        "children": {
+                          "ApiPermission.wsserverlesspatternsusersapiE5D489B3.POST..users": {
+                            "id": "ApiPermission.wsserverlesspatternsusersapiE5D489B3.POST..users",
+                            "path": "ws-serverless-patterns/users-api/Default/users/POST/ApiPermission.wsserverlesspatternsusersapiE5D489B3.POST..users",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "usersfunctionE009B461",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "usersapi3F703257"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "usersapiDeploymentStageprod3AFD506F"
+                                      },
+                                      "/POST/users"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.86.0"
+                            }
+                          },
+                          "ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.POST..users": {
+                            "id": "ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.POST..users",
+                            "path": "ws-serverless-patterns/users-api/Default/users/POST/ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.POST..users",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "usersfunctionE009B461",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "usersapi3F703257"
+                                      },
+                                      "/test-invoke-stage/POST/users"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.86.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "ws-serverless-patterns/users-api/Default/users/POST/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "httpMethod": "POST",
+                                "resourceId": {
+                                  "Ref": "usersapiusersFFFF605A"
+                                },
+                                "restApiId": {
+                                  "Ref": "usersapi3F703257"
+                                },
+                                "authorizationType": "CUSTOM",
+                                "authorizerId": {
+                                  "Ref": "apiauthorizerC9359042"
+                                },
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "usersfunctionE009B461",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.86.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.86.0"
+                        }
+                      },
+                      "{userid}": {
+                        "id": "{userid}",
+                        "path": "ws-serverless-patterns/users-api/Default/users/{userid}",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "ws-serverless-patterns/users-api/Default/users/{userid}/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                              "aws:cdk:cloudformation:props": {
+                                "parentId": {
+                                  "Ref": "usersapiusersFFFF605A"
+                                },
+                                "pathPart": "{userid}",
+                                "restApiId": {
+                                  "Ref": "usersapi3F703257"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnResource",
+                              "version": "2.86.0"
+                            }
+                          },
+                          "DELETE": {
+                            "id": "DELETE",
+                            "path": "ws-serverless-patterns/users-api/Default/users/{userid}/DELETE",
+                            "children": {
+                              "ApiPermission.wsserverlesspatternsusersapiE5D489B3.DELETE..users.{userid}": {
+                                "id": "ApiPermission.wsserverlesspatternsusersapiE5D489B3.DELETE..users.{userid}",
+                                "path": "ws-serverless-patterns/users-api/Default/users/{userid}/DELETE/ApiPermission.wsserverlesspatternsusersapiE5D489B3.DELETE..users.{userid}",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                                  "aws:cdk:cloudformation:props": {
+                                    "action": "lambda:InvokeFunction",
+                                    "functionName": {
+                                      "Fn::GetAtt": [
+                                        "usersfunctionE009B461",
+                                        "Arn"
+                                      ]
+                                    },
+                                    "principal": "apigateway.amazonaws.com",
+                                    "sourceArn": {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":execute-api:",
+                                          {
+                                            "Ref": "AWS::Region"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "AWS::AccountId"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "usersapi3F703257"
+                                          },
+                                          "/",
+                                          {
+                                            "Ref": "usersapiDeploymentStageprod3AFD506F"
+                                          },
+                                          "/DELETE/users/*"
+                                        ]
+                                      ]
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                                  "version": "2.86.0"
+                                }
+                              },
+                              "ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.DELETE..users.{userid}": {
+                                "id": "ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.DELETE..users.{userid}",
+                                "path": "ws-serverless-patterns/users-api/Default/users/{userid}/DELETE/ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.DELETE..users.{userid}",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                                  "aws:cdk:cloudformation:props": {
+                                    "action": "lambda:InvokeFunction",
+                                    "functionName": {
+                                      "Fn::GetAtt": [
+                                        "usersfunctionE009B461",
+                                        "Arn"
+                                      ]
+                                    },
+                                    "principal": "apigateway.amazonaws.com",
+                                    "sourceArn": {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":execute-api:",
+                                          {
+                                            "Ref": "AWS::Region"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "AWS::AccountId"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "usersapi3F703257"
+                                          },
+                                          "/test-invoke-stage/DELETE/users/*"
+                                        ]
+                                      ]
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                                  "version": "2.86.0"
+                                }
+                              },
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "ws-serverless-patterns/users-api/Default/users/{userid}/DELETE/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                                  "aws:cdk:cloudformation:props": {
+                                    "httpMethod": "DELETE",
+                                    "resourceId": {
+                                      "Ref": "usersapiusersuserid11A21EB6"
+                                    },
+                                    "restApiId": {
+                                      "Ref": "usersapi3F703257"
+                                    },
+                                    "authorizationType": "CUSTOM",
+                                    "authorizerId": {
+                                      "Ref": "apiauthorizerC9359042"
+                                    },
+                                    "integration": {
+                                      "type": "AWS_PROXY",
+                                      "uri": {
+                                        "Fn::Join": [
+                                          "",
+                                          [
+                                            "arn:",
+                                            {
+                                              "Ref": "AWS::Partition"
+                                            },
+                                            ":apigateway:",
+                                            {
+                                              "Ref": "AWS::Region"
+                                            },
+                                            ":lambda:path/2015-03-31/functions/",
+                                            {
+                                              "Fn::GetAtt": [
+                                                "usersfunctionE009B461",
+                                                "Arn"
+                                              ]
+                                            },
+                                            "/invocations"
+                                          ]
+                                        ]
+                                      },
+                                      "integrationHttpMethod": "POST"
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                                  "version": "2.86.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                              "version": "2.86.0"
+                            }
+                          },
+                          "GET": {
+                            "id": "GET",
+                            "path": "ws-serverless-patterns/users-api/Default/users/{userid}/GET",
+                            "children": {
+                              "ApiPermission.wsserverlesspatternsusersapiE5D489B3.GET..users.{userid}": {
+                                "id": "ApiPermission.wsserverlesspatternsusersapiE5D489B3.GET..users.{userid}",
+                                "path": "ws-serverless-patterns/users-api/Default/users/{userid}/GET/ApiPermission.wsserverlesspatternsusersapiE5D489B3.GET..users.{userid}",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                                  "aws:cdk:cloudformation:props": {
+                                    "action": "lambda:InvokeFunction",
+                                    "functionName": {
+                                      "Fn::GetAtt": [
+                                        "usersfunctionE009B461",
+                                        "Arn"
+                                      ]
+                                    },
+                                    "principal": "apigateway.amazonaws.com",
+                                    "sourceArn": {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":execute-api:",
+                                          {
+                                            "Ref": "AWS::Region"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "AWS::AccountId"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "usersapi3F703257"
+                                          },
+                                          "/",
+                                          {
+                                            "Ref": "usersapiDeploymentStageprod3AFD506F"
+                                          },
+                                          "/GET/users/*"
+                                        ]
+                                      ]
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                                  "version": "2.86.0"
+                                }
+                              },
+                              "ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.GET..users.{userid}": {
+                                "id": "ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.GET..users.{userid}",
+                                "path": "ws-serverless-patterns/users-api/Default/users/{userid}/GET/ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.GET..users.{userid}",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                                  "aws:cdk:cloudformation:props": {
+                                    "action": "lambda:InvokeFunction",
+                                    "functionName": {
+                                      "Fn::GetAtt": [
+                                        "usersfunctionE009B461",
+                                        "Arn"
+                                      ]
+                                    },
+                                    "principal": "apigateway.amazonaws.com",
+                                    "sourceArn": {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":execute-api:",
+                                          {
+                                            "Ref": "AWS::Region"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "AWS::AccountId"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "usersapi3F703257"
+                                          },
+                                          "/test-invoke-stage/GET/users/*"
+                                        ]
+                                      ]
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                                  "version": "2.86.0"
+                                }
+                              },
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "ws-serverless-patterns/users-api/Default/users/{userid}/GET/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                                  "aws:cdk:cloudformation:props": {
+                                    "httpMethod": "GET",
+                                    "resourceId": {
+                                      "Ref": "usersapiusersuserid11A21EB6"
+                                    },
+                                    "restApiId": {
+                                      "Ref": "usersapi3F703257"
+                                    },
+                                    "authorizationType": "CUSTOM",
+                                    "authorizerId": {
+                                      "Ref": "apiauthorizerC9359042"
+                                    },
+                                    "integration": {
+                                      "type": "AWS_PROXY",
+                                      "uri": {
+                                        "Fn::Join": [
+                                          "",
+                                          [
+                                            "arn:",
+                                            {
+                                              "Ref": "AWS::Partition"
+                                            },
+                                            ":apigateway:",
+                                            {
+                                              "Ref": "AWS::Region"
+                                            },
+                                            ":lambda:path/2015-03-31/functions/",
+                                            {
+                                              "Fn::GetAtt": [
+                                                "usersfunctionE009B461",
+                                                "Arn"
+                                              ]
+                                            },
+                                            "/invocations"
+                                          ]
+                                        ]
+                                      },
+                                      "integrationHttpMethod": "POST"
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                                  "version": "2.86.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                              "version": "2.86.0"
+                            }
+                          },
+                          "PUT": {
+                            "id": "PUT",
+                            "path": "ws-serverless-patterns/users-api/Default/users/{userid}/PUT",
+                            "children": {
+                              "ApiPermission.wsserverlesspatternsusersapiE5D489B3.PUT..users.{userid}": {
+                                "id": "ApiPermission.wsserverlesspatternsusersapiE5D489B3.PUT..users.{userid}",
+                                "path": "ws-serverless-patterns/users-api/Default/users/{userid}/PUT/ApiPermission.wsserverlesspatternsusersapiE5D489B3.PUT..users.{userid}",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                                  "aws:cdk:cloudformation:props": {
+                                    "action": "lambda:InvokeFunction",
+                                    "functionName": {
+                                      "Fn::GetAtt": [
+                                        "usersfunctionE009B461",
+                                        "Arn"
+                                      ]
+                                    },
+                                    "principal": "apigateway.amazonaws.com",
+                                    "sourceArn": {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":execute-api:",
+                                          {
+                                            "Ref": "AWS::Region"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "AWS::AccountId"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "usersapi3F703257"
+                                          },
+                                          "/",
+                                          {
+                                            "Ref": "usersapiDeploymentStageprod3AFD506F"
+                                          },
+                                          "/PUT/users/*"
+                                        ]
+                                      ]
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                                  "version": "2.86.0"
+                                }
+                              },
+                              "ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.PUT..users.{userid}": {
+                                "id": "ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.PUT..users.{userid}",
+                                "path": "ws-serverless-patterns/users-api/Default/users/{userid}/PUT/ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.PUT..users.{userid}",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                                  "aws:cdk:cloudformation:props": {
+                                    "action": "lambda:InvokeFunction",
+                                    "functionName": {
+                                      "Fn::GetAtt": [
+                                        "usersfunctionE009B461",
+                                        "Arn"
+                                      ]
+                                    },
+                                    "principal": "apigateway.amazonaws.com",
+                                    "sourceArn": {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":execute-api:",
+                                          {
+                                            "Ref": "AWS::Region"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "AWS::AccountId"
+                                          },
+                                          ":",
+                                          {
+                                            "Ref": "usersapi3F703257"
+                                          },
+                                          "/test-invoke-stage/PUT/users/*"
+                                        ]
+                                      ]
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                                  "version": "2.86.0"
+                                }
+                              },
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "ws-serverless-patterns/users-api/Default/users/{userid}/PUT/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                                  "aws:cdk:cloudformation:props": {
+                                    "httpMethod": "PUT",
+                                    "resourceId": {
+                                      "Ref": "usersapiusersuserid11A21EB6"
+                                    },
+                                    "restApiId": {
+                                      "Ref": "usersapi3F703257"
+                                    },
+                                    "authorizationType": "CUSTOM",
+                                    "authorizerId": {
+                                      "Ref": "apiauthorizerC9359042"
+                                    },
+                                    "integration": {
+                                      "type": "AWS_PROXY",
+                                      "uri": {
+                                        "Fn::Join": [
+                                          "",
+                                          [
+                                            "arn:",
+                                            {
+                                              "Ref": "AWS::Partition"
+                                            },
+                                            ":apigateway:",
+                                            {
+                                              "Ref": "AWS::Region"
+                                            },
+                                            ":lambda:path/2015-03-31/functions/",
+                                            {
+                                              "Fn::GetAtt": [
+                                                "usersfunctionE009B461",
+                                                "Arn"
+                                              ]
+                                            },
+                                            "/invocations"
+                                          ]
+                                        ]
+                                      },
+                                      "integrationHttpMethod": "POST"
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                                  "version": "2.86.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                              "version": "2.86.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Resource",
+                          "version": "2.86.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.Resource",
+                      "version": "2.86.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_apigateway.ResourceBase",
+                  "version": "2.86.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_apigateway.RestApi",
+              "version": "2.86.0"
+            }
+          },
+          "ApiGatewayLoggingRole": {
+            "id": "ApiGatewayLoggingRole",
+            "path": "ws-serverless-patterns/ApiGatewayLoggingRole",
+            "children": {
+              "ImportApiGatewayLoggingRole": {
+                "id": "ImportApiGatewayLoggingRole",
+                "path": "ws-serverless-patterns/ApiGatewayLoggingRole/ImportApiGatewayLoggingRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.86.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "ws-serverless-patterns/ApiGatewayLoggingRole/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "apigateway.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "managedPolicyArns": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+                          ]
+                        ]
+                      }
+                    ],
+                    "roleName": "ApiGatewayLoggingRole"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                  "version": "2.86.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Role",
+              "version": "2.86.0"
+            }
+          },
+          "RoleLogAccount": {
+            "id": "RoleLogAccount",
+            "path": "ws-serverless-patterns/RoleLogAccount",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Account",
+              "aws:cdk:cloudformation:props": {
+                "cloudWatchRoleArn": {
+                  "Fn::GetAtt": [
+                    "ApiGatewayLoggingRole10FE7C1B",
+                    "Arn"
+                  ]
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_apigateway.CfnAccount",
+              "version": "2.86.0"
+            }
+          },
+          "UsersApi": {
+            "id": "UsersApi",
+            "path": "ws-serverless-patterns/UsersApi",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.86.0"
+            }
+          },
+          "user-pool": {
+            "id": "user-pool",
+            "path": "ws-serverless-patterns/user-pool",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "ws-serverless-patterns/user-pool/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Cognito::UserPool",
+                  "aws:cdk:cloudformation:props": {
+                    "accountRecoverySetting": {
+                      "recoveryMechanisms": [
+                        {
+                          "name": "verified_phone_number",
+                          "priority": 1
+                        },
+                        {
+                          "name": "verified_email",
+                          "priority": 2
+                        }
+                      ]
+                    },
+                    "adminCreateUserConfig": {
+                      "allowAdminCreateUserOnly": false
+                    },
+                    "autoVerifiedAttributes": [
+                      "email"
+                    ],
+                    "emailVerificationMessage": "The verification code to your new account is {####}",
+                    "emailVerificationSubject": "Verify your new account",
+                    "schema": [
+                      {
+                        "name": "email",
+                        "mutable": true,
+                        "required": true
+                      },
+                      {
+                        "name": "name",
+                        "mutable": true,
+                        "required": true
+                      }
+                    ],
+                    "smsVerificationMessage": "The verification code to your new account is {####}",
+                    "usernameAttributes": [
+                      "email"
+                    ],
+                    "userPoolName": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          {
+                            "Ref": "AWS::StackName"
+                          },
+                          "-user-pool"
+                        ]
+                      ]
+                    },
+                    "userPoolTags": {
+                      "Name": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            {
+                              "Ref": "AWS::StackName"
+                            },
+                            "-user-pool"
+                          ]
+                        ]
+                      }
+                    },
+                    "verificationMessageTemplate": {
+                      "defaultEmailOption": "CONFIRM_WITH_CODE",
+                      "emailMessage": "The verification code to your new account is {####}",
+                      "emailSubject": "Verify your new account",
+                      "smsMessage": "The verification code to your new account is {####}"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cognito.CfnUserPool",
+                  "version": "2.86.0"
+                }
+              },
+              "user-pool-client": {
+                "id": "user-pool-client",
+                "path": "ws-serverless-patterns/user-pool/user-pool-client",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "ws-serverless-patterns/user-pool/user-pool-client/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Cognito::UserPoolClient",
+                      "aws:cdk:cloudformation:props": {
+                        "userPoolId": {
+                          "Ref": "userpool38E431F2"
+                        },
+                        "allowedOAuthFlows": [
+                          "code"
+                        ],
+                        "allowedOAuthFlowsUserPoolClient": true,
+                        "allowedOAuthScopes": [
+                          "email",
+                          "openid"
+                        ],
+                        "callbackUrLs": [
+                          "http://localhost"
+                        ],
+                        "clientName": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              {
+                                "Ref": "AWS::StackName"
+                              },
+                              "-user-pool-client"
+                            ]
+                          ]
+                        },
+                        "explicitAuthFlows": [
+                          "ALLOW_USER_PASSWORD_AUTH",
+                          "ALLOW_USER_SRP_AUTH",
+                          "ALLOW_REFRESH_TOKEN_AUTH"
+                        ],
+                        "preventUserExistenceErrors": "ENABLED",
+                        "refreshTokenValidity": 43200,
+                        "supportedIdentityProviders": [
+                          "COGNITO"
+                        ],
+                        "tokenValidityUnits": {
+                          "refreshToken": "minutes"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_cognito.CfnUserPoolClient",
+                      "version": "2.86.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cognito.UserPoolClient",
+                  "version": "2.86.0"
+                }
+              },
+              "user-pool-domain": {
+                "id": "user-pool-domain",
+                "path": "ws-serverless-patterns/user-pool/user-pool-domain",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "ws-serverless-patterns/user-pool/user-pool-domain/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Cognito::UserPoolDomain",
+                      "aws:cdk:cloudformation:props": {
+                        "domain": {
+                          "Ref": "userpooluserpoolclientCA1171AF"
+                        },
+                        "userPoolId": {
+                          "Ref": "userpool38E431F2"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_cognito.CfnUserPoolDomain",
+                      "version": "2.86.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cognito.UserPoolDomain",
+                  "version": "2.86.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cognito.UserPool",
+              "version": "2.86.0"
+            }
+          },
+          "api-admin-group-name": {
+            "id": "api-admin-group-name",
+            "path": "ws-serverless-patterns/api-admin-group-name",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.86.0"
+            }
+          },
+          "api-admin-group": {
+            "id": "api-admin-group",
+            "path": "ws-serverless-patterns/api-admin-group",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::Cognito::UserPoolGroup",
+              "aws:cdk:cloudformation:props": {
+                "userPoolId": {
+                  "Ref": "userpool38E431F2"
+                },
+                "description": "User group for API Administrators",
+                "groupName": {
+                  "Ref": "apiadmingroupname"
+                },
+                "precedence": 0
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cognito.CfnUserPoolGroup",
+              "version": "2.86.0"
+            }
+          },
+          "alarms-topic": {
+            "id": "alarms-topic",
+            "path": "ws-serverless-patterns/alarms-topic",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "ws-serverless-patterns/alarms-topic/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
+                  "aws:cdk:cloudformation:props": {
+                    "displayName": "Alarms topic",
+                    "tags": [
+                      {
+                        "key": "Stack",
+                        "value": {
+                          "Ref": "AWS::StackName"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sns.CfnTopic",
+                  "version": "2.86.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_sns.Topic",
+              "version": "2.86.0"
+            }
+          },
+          "rest-api-errors-alarm": {
+            "id": "rest-api-errors-alarm",
+            "path": "ws-serverless-patterns/rest-api-errors-alarm",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "ws-serverless-patterns/rest-api-errors-alarm/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "comparisonOperator": "GreaterThanThreshold",
+                    "evaluationPeriods": 1,
+                    "alarmActions": [
+                      {
+                        "Ref": "alarmstopic6DFD816B"
+                      }
+                    ],
+                    "dimensions": [
+                      {
+                        "name": "ApiName",
+                        "value": "users-api"
+                      }
+                    ],
+                    "metricName": "5XXError",
+                    "namespace": "AWS/ApiGateway",
+                    "period": 60,
+                    "statistic": "Sum",
+                    "threshold": 1
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudwatch.CfnAlarm",
+                  "version": "2.86.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudwatch.Alarm",
+              "version": "2.86.0"
+            }
+          },
+          "authorizer-function-errors-alarm": {
+            "id": "authorizer-function-errors-alarm",
+            "path": "ws-serverless-patterns/authorizer-function-errors-alarm",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "ws-serverless-patterns/authorizer-function-errors-alarm/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "comparisonOperator": "GreaterThanThreshold",
+                    "evaluationPeriods": 1,
+                    "alarmActions": [
+                      {
+                        "Ref": "alarmstopic6DFD816B"
+                      }
+                    ],
+                    "dimensions": [
+                      {
+                        "name": "FunctionName",
+                        "value": {
+                          "Ref": "authorizerfunctionE8DF8ABA"
+                        }
+                      }
+                    ],
+                    "metricName": "Errors",
+                    "namespace": "AWS/Lambda",
+                    "period": 60,
+                    "statistic": "Sum",
+                    "threshold": 1
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudwatch.CfnAlarm",
+                  "version": "2.86.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudwatch.Alarm",
+              "version": "2.86.0"
+            }
+          },
+          "authorizor-throttling-alarm": {
+            "id": "authorizor-throttling-alarm",
+            "path": "ws-serverless-patterns/authorizor-throttling-alarm",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "ws-serverless-patterns/authorizor-throttling-alarm/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "comparisonOperator": "GreaterThanThreshold",
+                    "evaluationPeriods": 1,
+                    "alarmActions": [
+                      {
+                        "Ref": "alarmstopic6DFD816B"
+                      }
+                    ],
+                    "dimensions": [
+                      {
+                        "name": "FunctionName",
+                        "value": {
+                          "Ref": "authorizerfunctionE8DF8ABA"
+                        }
+                      }
+                    ],
+                    "metricName": "Throttles",
+                    "namespace": "AWS/Lambda",
+                    "period": 60,
+                    "statistic": "Sum",
+                    "threshold": 1
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudwatch.CfnAlarm",
+                  "version": "2.86.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudwatch.Alarm",
+              "version": "2.86.0"
+            }
+          },
+          "users-function-errors-alarm": {
+            "id": "users-function-errors-alarm",
+            "path": "ws-serverless-patterns/users-function-errors-alarm",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "ws-serverless-patterns/users-function-errors-alarm/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "comparisonOperator": "GreaterThanThreshold",
+                    "evaluationPeriods": 1,
+                    "alarmActions": [
+                      {
+                        "Ref": "alarmstopic6DFD816B"
+                      }
+                    ],
+                    "dimensions": [
+                      {
+                        "name": "FunctionName",
+                        "value": {
+                          "Ref": "usersfunctionE009B461"
+                        }
+                      }
+                    ],
+                    "metricName": "Errors",
+                    "namespace": "AWS/Lambda",
+                    "period": 60,
+                    "statistic": "Sum",
+                    "threshold": 1
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudwatch.CfnAlarm",
+                  "version": "2.86.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudwatch.Alarm",
+              "version": "2.86.0"
+            }
+          },
+          "users-function-throttling-alarm": {
+            "id": "users-function-throttling-alarm",
+            "path": "ws-serverless-patterns/users-function-throttling-alarm",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "ws-serverless-patterns/users-function-throttling-alarm/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "comparisonOperator": "GreaterThanThreshold",
+                    "evaluationPeriods": 1,
+                    "alarmActions": [
+                      {
+                        "Ref": "alarmstopic6DFD816B"
+                      }
+                    ],
+                    "dimensions": [
+                      {
+                        "name": "FunctionName",
+                        "value": {
+                          "Ref": "usersfunctionE009B461"
+                        }
+                      }
+                    ],
+                    "metricName": "Throttles",
+                    "namespace": "AWS/Lambda",
+                    "period": 60,
+                    "statistic": "Sum",
+                    "threshold": 1
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudwatch.CfnAlarm",
+                  "version": "2.86.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudwatch.Alarm",
+              "version": "2.86.0"
+            }
+          },
+          "alarms-dashboard": {
+            "id": "alarms-dashboard",
+            "path": "ws-serverless-patterns/alarms-dashboard",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "ws-serverless-patterns/alarms-dashboard/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
+                  "aws:cdk:cloudformation:props": {
+                    "dashboardBody": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "{\"start\":\"-P7D\",\"widgets\":[{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Users Lambda\",\"region\":\"",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "\",\"metrics\":[[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                          {
+                            "Ref": "usersfunctionE009B461"
+                          },
+                          "\",{\"stat\":\"Sum\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+                          {
+                            "Ref": "usersfunctionE009B461"
+                          },
+                          "\",{\"stat\":\"Sum\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+                          {
+                            "Ref": "usersfunctionE009B461"
+                          },
+                          "\",{\"stat\":\"Sum\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                          {
+                            "Ref": "usersfunctionE009B461"
+                          },
+                          "\"],[\"AWS/Lambda\",\"ConcurrentExecutions\",\"FunctionName\",\"",
+                          {
+                            "Ref": "usersfunctionE009B461"
+                          },
+                          "\",{\"stat\":\"Maximum\"}]],\"yAxis\":{},\"period\":60,\"stat\":\"Sum\"}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":6,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Authorizer Lambda\",\"region\":\"",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "\",\"metrics\":[[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"",
+                          {
+                            "Ref": "authorizerfunctionE8DF8ABA"
+                          },
+                          "\",{\"stat\":\"Sum\"}],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"",
+                          {
+                            "Ref": "authorizerfunctionE8DF8ABA"
+                          },
+                          "\",{\"stat\":\"Sum\"}],[\"AWS/Lambda\",\"Throttles\",\"FunctionName\",\"",
+                          {
+                            "Ref": "authorizerfunctionE8DF8ABA"
+                          },
+                          "\",{\"stat\":\"Sum\"}],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"",
+                          {
+                            "Ref": "authorizerfunctionE8DF8ABA"
+                          },
+                          "\"],[\"AWS/Lambda\",\"ConcurrentExecutions\",\"FunctionName\",\"",
+                          {
+                            "Ref": "authorizerfunctionE8DF8ABA"
+                          },
+                          "\",{\"stat\":\"Maximum\"}]],\"yAxis\":{},\"period\":60,\"stat\":\"Sum\"}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":12,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Users API\",\"region\":\"",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "\",\"metrics\":[[\"AWS/ApiGateway\",\"DataProcessed\",\"ApiName\",\"users-api\"],[\"AWS/ApiGateway\",\"IntegrationLatency\",\"ApiName\",\"users-api\"],[\"AWS/ApiGateway\",\"Latency\",\"ApiName\",\"users-api\"],[\"AWS/ApiGateway\",\"4XXError\",\"ApiName\",\"users-api\",{\"stat\":\"Sum\",\"yAxis\":\"right\"}],[\"AWS/ApiGateway\",\"5XXError\",\"ApiName\",\"users-api\",{\"stat\":\"Sum\",\"yAxis\":\"right\"}],[\"AWS/ApiGateway\",\"Count\",\"ApiName\",\"users-api\",{\"stat\":\"SampleCount\",\"yAxis\":\"right\"}]],\"yAxis\":{},\"period\":60,\"stat\":\"Sum\"}}]}"
+                        ]
+                      ]
+                    },
+                    "dashboardName": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          {
+                            "Ref": "AWS::StackName"
+                          },
+                          "-dashboard"
+                        ]
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudwatch.CfnDashboard",
+                  "version": "2.86.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudwatch.Dashboard",
+              "version": "2.86.0"
+            }
+          },
+          "UserPool": {
+            "id": "UserPool",
+            "path": "ws-serverless-patterns/UserPool",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.86.0"
+            }
+          },
+          "UserPoolClient": {
+            "id": "UserPoolClient",
+            "path": "ws-serverless-patterns/UserPoolClient",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.86.0"
+            }
+          },
+          "UserPoolAdminGroupName ": {
+            "id": "UserPoolAdminGroupName ",
+            "path": "ws-serverless-patterns/UserPoolAdminGroupName ",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.86.0"
+            }
+          },
+          "CognitoLoginURL": {
+            "id": "CognitoLoginURL",
+            "path": "ws-serverless-patterns/CognitoLoginURL",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.86.0"
+            }
+          },
+          "CognitoAuthCommand": {
+            "id": "CognitoAuthCommand",
+            "path": "ws-serverless-patterns/CognitoAuthCommand",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.86.0"
+            }
+          },
+          "AlarmsTopic": {
+            "id": "AlarmsTopic",
+            "path": "ws-serverless-patterns/AlarmsTopic",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.86.0"
+            }
+          },
+          "DashboardURL": {
+            "id": "DashboardURL",
+            "path": "ws-serverless-patterns/DashboardURL",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.86.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "ws-serverless-patterns/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "ws-serverless-patterns/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.86.0"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "ws-serverless-patterns/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnCondition",
+                  "version": "2.86.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "ws-serverless-patterns/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.86.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "ws-serverless-patterns/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.86.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.86.0"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.4.2"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.86.0"
+    }
+  }
+}

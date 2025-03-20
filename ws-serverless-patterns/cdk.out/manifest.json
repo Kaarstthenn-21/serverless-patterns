@@ -1,0 +1,408 @@
+{
+  "version": "32.0.0",
+  "artifacts": {
+    "ws-serverless-patterns.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "ws-serverless-patterns.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "ws-serverless-patterns": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "ws-serverless-patterns.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/acdfb22e83508d69b048b4008b137d9a9825de80e554ec6355dc50e4457d5a08.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "ws-serverless-patterns.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "ws-serverless-patterns.assets"
+      ],
+      "metadata": {
+        "/ws-serverless-patterns/users-table": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "userstable4FB8B1A2"
+            }
+          }
+        ],
+        "/ws-serverless-patterns/users-table/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "userstable4FB8B1A2"
+          }
+        ],
+        "/ws-serverless-patterns/UsersTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UsersTable"
+          }
+        ],
+        "/ws-serverless-patterns/users-function/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersfunctionServiceRoleE33870F7"
+          }
+        ],
+        "/ws-serverless-patterns/users-function/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersfunctionServiceRoleDefaultPolicyE42C200E"
+          }
+        ],
+        "/ws-serverless-patterns/users-function/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersfunctionE009B461"
+          }
+        ],
+        "/ws-serverless-patterns/UsersFunction": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UsersFunction"
+          }
+        ],
+        "/ws-serverless-patterns/authorizer-function/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "authorizerfunctionServiceRoleB2BE3D06"
+          }
+        ],
+        "/ws-serverless-patterns/authorizer-function/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "authorizerfunctionServiceRoleDefaultPolicyC521EA16"
+          }
+        ],
+        "/ws-serverless-patterns/authorizer-function/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "authorizerfunctionE8DF8ABA"
+          }
+        ],
+        "/ws-serverless-patterns/authorizer-function/wsserverlesspatternsapiauthorizer17FA84C1:Permissions": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "authorizerfunctionwsserverlesspatternsapiauthorizer17FA84C1PermissionsDEB48219"
+          }
+        ],
+        "/ws-serverless-patterns/api-authorizer/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiauthorizerC9359042"
+          }
+        ],
+        "/ws-serverless-patterns/api-access-logs/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiaccesslogs454B57D2"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapi3F703257"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiDeploymentD9BFB59Db85cb9c689115b4fca64a73423c0d9b5"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiDeploymentStageprod3AFD506F"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiEndpointD5A5E0EF"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Default/users/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiusersFFFF605A"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Default/users/GET/ApiPermission.wsserverlesspatternsusersapiE5D489B3.GET..users": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiusersGETApiPermissionwsserverlesspatternsusersapiE5D489B3GETusersFA84B5B5"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Default/users/GET/ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.GET..users": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiusersGETApiPermissionTestwsserverlesspatternsusersapiE5D489B3GETusers02E35FB7"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Default/users/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiusersGET9EA7DDF7"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Default/users/POST/ApiPermission.wsserverlesspatternsusersapiE5D489B3.POST..users": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiusersPOSTApiPermissionwsserverlesspatternsusersapiE5D489B3POSTusersA00CC8DB"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Default/users/POST/ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.POST..users": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiusersPOSTApiPermissionTestwsserverlesspatternsusersapiE5D489B3POSTusersCFD593DD"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Default/users/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiusersPOSTDE3BC8C1"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Default/users/{userid}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiusersuserid11A21EB6"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Default/users/{userid}/DELETE/ApiPermission.wsserverlesspatternsusersapiE5D489B3.DELETE..users.{userid}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiusersuseridDELETEApiPermissionwsserverlesspatternsusersapiE5D489B3DELETEusersuseridC3508EBE"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Default/users/{userid}/DELETE/ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.DELETE..users.{userid}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiusersuseridDELETEApiPermissionTestwsserverlesspatternsusersapiE5D489B3DELETEusersuseridBD048A4A"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Default/users/{userid}/DELETE/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiusersuseridDELETE31E153EA"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Default/users/{userid}/GET/ApiPermission.wsserverlesspatternsusersapiE5D489B3.GET..users.{userid}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiusersuseridGETApiPermissionwsserverlesspatternsusersapiE5D489B3GETusersuseridDC786029"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Default/users/{userid}/GET/ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.GET..users.{userid}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiusersuseridGETApiPermissionTestwsserverlesspatternsusersapiE5D489B3GETusersuseridC41CEC38"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Default/users/{userid}/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiusersuseridGETD576A0AC"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Default/users/{userid}/PUT/ApiPermission.wsserverlesspatternsusersapiE5D489B3.PUT..users.{userid}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiusersuseridPUTApiPermissionwsserverlesspatternsusersapiE5D489B3PUTusersuserid2162DB92"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Default/users/{userid}/PUT/ApiPermission.Test.wsserverlesspatternsusersapiE5D489B3.PUT..users.{userid}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiusersuseridPUTApiPermissionTestwsserverlesspatternsusersapiE5D489B3PUTusersuseridD0211668"
+          }
+        ],
+        "/ws-serverless-patterns/users-api/Default/users/{userid}/PUT/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersapiusersuseridPUT3E09A288"
+          }
+        ],
+        "/ws-serverless-patterns/ApiGatewayLoggingRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiGatewayLoggingRole10FE7C1B"
+          }
+        ],
+        "/ws-serverless-patterns/RoleLogAccount": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RoleLogAccount"
+          }
+        ],
+        "/ws-serverless-patterns/UsersApi": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UsersApi"
+          }
+        ],
+        "/ws-serverless-patterns/user-pool/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "userpool38E431F2"
+          }
+        ],
+        "/ws-serverless-patterns/user-pool/user-pool-client/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "userpooluserpoolclientCA1171AF"
+          }
+        ],
+        "/ws-serverless-patterns/user-pool/user-pool-domain/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "userpooluserpooldomainC7188833"
+          }
+        ],
+        "/ws-serverless-patterns/api-admin-group-name": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiadmingroupname"
+          }
+        ],
+        "/ws-serverless-patterns/api-admin-group": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiadmingroup"
+          }
+        ],
+        "/ws-serverless-patterns/alarms-topic/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "alarmstopic6DFD816B"
+          }
+        ],
+        "/ws-serverless-patterns/rest-api-errors-alarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "restapierrorsalarmA337A08E"
+          }
+        ],
+        "/ws-serverless-patterns/authorizer-function-errors-alarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "authorizerfunctionerrorsalarm72B3A674"
+          }
+        ],
+        "/ws-serverless-patterns/authorizor-throttling-alarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "authorizorthrottlingalarm74A934EA"
+          }
+        ],
+        "/ws-serverless-patterns/users-function-errors-alarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersfunctionerrorsalarm3F48CA42"
+          }
+        ],
+        "/ws-serverless-patterns/users-function-throttling-alarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersfunctionthrottlingalarmB20051B6"
+          }
+        ],
+        "/ws-serverless-patterns/alarms-dashboard/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "alarmsdashboard1C7222AC"
+          }
+        ],
+        "/ws-serverless-patterns/UserPool": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UserPool"
+          }
+        ],
+        "/ws-serverless-patterns/UserPoolClient": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UserPoolClient"
+          }
+        ],
+        "/ws-serverless-patterns/UserPoolAdminGroupName ": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UserPoolAdminGroupName"
+          }
+        ],
+        "/ws-serverless-patterns/CognitoLoginURL": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CognitoLoginURL"
+          }
+        ],
+        "/ws-serverless-patterns/CognitoAuthCommand": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CognitoAuthCommand"
+          }
+        ],
+        "/ws-serverless-patterns/AlarmsTopic": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AlarmsTopic"
+          }
+        ],
+        "/ws-serverless-patterns/DashboardURL": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DashboardURL"
+          }
+        ],
+        "/ws-serverless-patterns/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/ws-serverless-patterns/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/ws-serverless-patterns/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/ws-serverless-patterns/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "ws-serverless-patterns"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

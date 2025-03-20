@@ -1,0 +1,45 @@
+{
+  "version": "32.0.0",
+  "files": {
+    "210f355d37e2fc867b8ca2e9a714acd7e532c47fe27a8629a9b7cc7fb2d6f94c": {
+      "source": {
+        "path": "/Users/kaarstthenn/Documents/miscelania/serverless/lambda-workshop/ws-serverless-patterns",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "210f355d37e2fc867b8ca2e9a714acd7e532c47fe27a8629a9b7cc7fb2d6f94c.zip",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    },
+    "0766f352b731b4e5084257cf4a193409c85747ce36b174c94e5a523dce588257": {
+      "source": {
+        "path": "/Users/kaarstthenn/Documents/miscelania/serverless/lambda-workshop/ws-serverless-patterns",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "0766f352b731b4e5084257cf4a193409c85747ce36b174c94e5a523dce588257.zip",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    },
+    "acdfb22e83508d69b048b4008b137d9a9825de80e554ec6355dc50e4457d5a08": {
+      "source": {
+        "path": "ws-serverless-patterns.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "acdfb22e83508d69b048b4008b137d9a9825de80e554ec6355dc50e4457d5a08.json",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}
